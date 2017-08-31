@@ -1,0 +1,445 @@
+# File name: main.py
+#:kivy 1.9.1
+<Start>:
+    BoxLayout:
+        orientation: 'vertical'
+        GridLayout:
+            rows: 3
+            padding: 20
+            BoxLayout:
+                orientation: 'horizontal'
+                padding: 20
+                Image:
+                    source: 'resources/images/logo.png'
+                    pos: self.pos
+                    size: self.size
+            BoxLayout:
+                orientation: 'vertical'
+                padding: 20
+                Button:
+                    text: "Encrypt"
+                    font_size: 40
+                    on_release: root.manager.current = 'encryption'
+                    background_normal: ''
+                    background_color: (0, 0.529411764705882, 1, 1)
+            BoxLayout:
+                orientation: 'vertical'
+                padding: 20
+                Button:
+                    text: "Decrypt"
+                    font_size: 40
+                    on_release: root.manager.current = 'decryption'
+                    background_normal: ''
+                    background_color: (0, 0.529411764705882, 1, 1)
+<Encryption>:
+    BoxLayout:
+        orientation: 'vertical'
+        GridLayout:
+            rows: 6
+            padding: 20
+            BoxLayout:
+                orientation: 'horizontal'
+                padding: 20
+                Image:
+                    source: 'resources/images/logo.png'
+                    pos: self.pos
+                    size: self.size
+            BoxLayout:
+                orientation: 'vertical'
+                padding: 20
+                size_hint_y: 0.75
+                Button:
+                    text: "Browse"
+                    font_size: 30
+                    background_normal: ''
+                    background_color: (0, 0.529411764705882, 1, 1)
+                    on_release: root.show_load()
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: 1
+                padding: 20
+                spacing: 30
+                Label:
+                    text: "[color=#000000]Selected file:[/color]"
+                    markup: True
+                    font_size: 20
+                    #halign: 'right'
+                Label:
+                    text: root.labeltext
+                    markup: True
+                    font_size: 20
+                    canvas.before:
+                        Color:
+                            rgb: 0.8,0.8,0.8
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                    #halign: 'left'
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: 0.25
+                padding: [20, 0, 20, 0]
+                spacing: 30
+                Label:
+                    text: "[color=#000000]Encryption password:[/color]"
+                    markup: True
+                    font_size: 20
+                TextInput:
+                    id: password_input
+                    multiline: False
+                    password: True
+                    font_size: 20
+            #BoxLayout:
+            #    orientation: 'horizontal'
+            #    size_hint_y: 0.25
+            #    padding: [240, 0, 20, 0]
+            #    Label:
+            #        text: "[color=#000000]OS:[/color]"
+            #        markup: True
+            #        font_size: 20
+            #        halign: 'right'
+            #    Label:
+            #        text: "[color=#000000]Windows[/color]"
+            #        markup: True
+            #        font_size: 20
+            #        halign: 'right'
+            #    CheckBox:
+            #        canvas.before:
+            #            Color:
+            #                rgb: 0,0.529411764705882,1
+            #            Rectangle:
+            #                pos:self.center_x-8, self.center_y-8
+            #                size:[16,16]
+            #            Color:
+            #                rgb: 0.8,0.8,0.8
+            #            Rectangle:
+            #                pos:self.center_x-7, self.center_y-7
+            #                size:[14,14]
+            #    Label:
+            #        text: "[color=#000000]macOS[/color]"
+            #        markup: True
+            #        font_size: 20
+            #        halign: 'right'
+            #    CheckBox:
+            #        canvas.before:
+            #            Color:
+            #                rgb: 0,0.529411764705882,1
+            #            Rectangle:
+            #                pos:self.center_x-8, self.center_y-8
+            #                size:[16,16]
+            #            Color:
+            #                rgb: 0.8,0.8,0.8
+            #            Rectangle:
+            #                pos:self.center_x-7, self.center_y-7
+            #                size:[14,14]
+            #    Label:
+            #        text: "[color=#000000]Linux[/color]"
+            #        markup: True
+            #        font_size: 20
+            #        halign: 'right'
+            #    CheckBox:
+            #        canvas.before:
+            #            Color:
+            #                rgb: 0,0.529411764705882,1
+            #            Rectangle:
+            #                pos:self.center_x-8, self.center_y-8
+            #                size:[16,16]
+            #            Color:
+            #                rgb: 0.8,0.8,0.8
+            #            Rectangle:
+            #                pos:self.center_x-7, self.center_y-7
+            #                size:[14,14]
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: 30
+                padding: (20, 80, 20, 10)
+                Button:
+                    text: "Back"
+                    font_size: 20
+                    background_normal: ''
+                    background_color: (1, 0, 0.529411764705882, 1)
+                    on_release: root.manager.current = 'start'
+                    on_release: password_input.text = ''
+                    on_release: root.reset_var()
+                Button:
+                    text: "[color=#000000]Encrypt[/color]"
+                    markup: True
+                    font_size: 20
+                    background_normal: ''
+                    background_color: (0, 1, 0.529411764705882, 1)
+                    on_release: root.enpopup.open()
+                    on_release: password_input.text = ''
+                    on_press: root.encryption(password_input.text)
+<EnPopup>:
+    on_open: root.memor()
+    auto_dismiss: False
+    title: 'Encrypting...'
+    #title_color: (0, 0.529411764705882, 1, 1)
+    size_hint_y: 0.25
+    size_hint_x: 0.5
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: "Encryption in progress..."
+            #markup: True
+        ProgressBar:
+            max: 100
+            value: root.i
+        Label:
+            text: str(root.i) + "%"
+        #BoxLayout:
+        #    orientation: 'horizontal'
+        #    padding: (80, 0, 80, 0)
+        #    Button:
+        #        text: "[color=#FFFFFF]Dismiss[/color]"
+        #        markup: True
+                #background_normal: ''
+                #background_color: (1, 0, 0.529411764705882, 1)
+        #        on_release: root.dismiss()
+<EnErrorPopup>:
+    auto_dismiss: False
+    title: "Error!"
+    size_hint_y: 0.25
+    size_hint_x: 0.5
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: "Something went wrong..."
+        Button:
+            text: "Close"
+            on_release: root.dismiss()
+<EnSuccessPopup>:
+    on_open: root.reset_var()
+    auto_dismiss: False
+    title: "Success!"
+    size_hint_y: 0.25
+    size_hint_x: 0.5
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: "Your file has been encrypted!"
+        Button:
+            text: "Close"
+            on_release: root.dismiss()
+<Decryption>:
+    BoxLayout:
+        orientation: 'vertical'
+        GridLayout:
+            rows: 6
+            padding: 20
+            BoxLayout:
+                orientation: 'horizontal'
+                padding: 20
+                Image:
+                    source: 'resources/images/logo.png'
+                    pos: self.pos
+                    size: self.size
+            BoxLayout:
+                orientation: 'vertical'
+                padding: 20
+                size_hint_y: 0.75
+                Button:
+                    text: "Browse"
+                    font_size: 30
+                    background_normal: ''
+                    background_color: (0, 0.529411764705882, 1, 1)
+                    on_release: root.show_save()
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: 1
+                padding: 20
+                spacing: 30
+                Label:
+                    text: "[color=#000000]Selected file:[/color]"
+                    markup: True
+                    font_size: 20
+                    #halign: 'right'
+                Label:
+                    text: root.labeltext
+                    markup: True
+                    font_size: 20
+                    canvas.before:
+                        Color:
+                            rgb: 0.8,0.8,0.8
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                    #halign: 'left'
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: 0.25
+                padding: [50, 0, 50, 0]
+                spacing: 30
+                Label:
+                    text: "[color=#000000]Decryption password:[/color]"
+                    markup: True
+                    font_size: 20
+                TextInput:
+                    id: password_input
+                    multiline: False
+                    password: True
+                    font_size: 20
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: 30
+                padding: (20, 80, 20, 10)
+                Button:
+                    text: "Back"
+                    font_size: 20
+                    background_normal: ''
+                    background_color: (1, 0, 0.529411764705882, 1)
+                    on_release: root.manager.current = 'start'
+                    on_release: password_input.text = ''
+                    on_release: root.reset_var()
+                Button:
+                    text: "[color=#000000]Decrypt[/color]"
+                    markup: True
+                    font_size: 20
+                    background_normal: ''
+                    background_color: (0, 1, 0.529411764705882, 1)
+                    on_release: root.depopup.open()
+                    on_press: root.decryption(password_input.text)
+<DePopup>:
+    on_open: root.memor()
+    auto_dismiss: False
+    title: 'Decrypting...'
+    #title_color: (0, 0.529411764705882, 1, 1)
+    size_hint_y: 0.25
+    size_hint_x: 0.5
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: "Decryption in progress..."
+            #markup: True
+        ProgressBar:
+            max: 100
+            value: root.i
+        Label:
+            text: str(root.i) + "%"
+        #BoxLayout:
+        #    orientation: 'horizontal'
+        #    padding: (80, 0, 80, 0)
+        #    Button:
+        #        text: "[color=#000000]Cancel[/color]"
+        #        markup: True
+        #        background_normal: ''
+        #        background_color: (1, 0, 0.529411764705882, 1)
+        #        on_release: root.dismiss()
+<DeErrorPopup>:
+    auto_dismiss: False
+    title: "Error!"
+    size_hint_y: 0.25
+    size_hint_x: 0.7
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: "Something went wrong... Maybe wrong decryption password?"
+        Button:
+            text: "Close"
+            on_release: root.dismiss()
+<DeDataPopup>:
+    on_open: root.reset_var()
+    auto_dismiss: False
+    title: "Error!"
+    size_hint_y: 0.25
+    size_hint_x: 0.5
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: "Try decrypting 1.enc instead of data.enc"
+        Button:
+            text: "Close"
+            on_release: root.dismiss()
+<DeSuccessPopup>:
+    on_open: root.reset_var()
+    auto_dismiss: False
+    title: "Success!"
+    size_hint_y: 0.25
+    size_hint_x: 0.5
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: "Your file has been decrypted!"
+        Button:
+            text: "Close"
+            on_release: root.dismiss()
+<Browse>:
+    BoxLayout:
+        orientation: 'vertical'
+        GridLayout:
+            rows: 2
+            padding: 20
+            BoxLayout:
+                size: self.size
+                pos: self.pos
+                size_hint_y: 5
+                padding: 20
+                orientation: "vertical"
+                FileChooser:
+                    id: fc
+                    FileChooserListLayout
+                BoxLayout:
+                    size_hint_y: None
+                    height: 60
+                    Button:
+                        text: "Cancel"
+                        background_normal: ''
+                        background_color: (1, 0, 0.529411764705882, 1)
+                        on_release: root.cancel()
+                    Button:
+                        text: "Load"
+                        background_normal: ''
+                        background_color: (0, 0.529411764705882, 1, 1)
+                        on_release: root.load(fc.rootpath, fc.selection)
+                #Button:
+                #    text: "Drop a file"
+                #    background_normal: ''
+                #    background_color: (0, 0.529411764705882, 1, 1)
+                #    on_release: root.dropfile.open()
+#<DropFile>:
+#    auto_dismiss: False
+#    title: 'Drop a file here'
+#    size_hint_y: 0.5
+#    size_hint_x: 0.75
+#    BoxLayout:
+#        orientation: 'vertical'
+#        Label:
+#            text: "Drop a file here"
+#        BoxLayout:
+#            orientation: 'horizontal'
+#            padding: (80, 0, 80, 0)
+#            size_hint_y: 0.5
+#            Button:
+#                text: "[color=#000000]Ready[/color]"
+#                markup: True
+#                background_normal: ''
+#                background_color: (1, 0, 0.529411764705882, 1)
+#                on_release: root.dismiss()
+<Export>:
+    BoxLayout:
+        orientation: 'vertical'
+        GridLayout:
+            rows: 2
+            padding: 20
+            BoxLayout:
+                size: self.size
+                pos: self.pos
+                size_hint_y: 5
+                padding: 20
+                orientation: "vertical"
+                FileChooser:
+                    id: fc
+                    FileChooserListLayout
+                BoxLayout:
+                    size_hint_y: None
+                    height: 60
+                    Button:
+                        text: "Cancel"
+                        background_normal: ''
+                        background_color: (1, 0, 0.529411764705882, 1)
+                        on_release: root.cancel()
+                    Button:
+                        text: "Load"
+                        background_normal: ''
+                        background_color: (0, 0.529411764705882, 1, 1)
+                        on_release: root.load(fc.rootpath, fc.selection)
